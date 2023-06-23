@@ -1,0 +1,49 @@
+.messageWrapper {
+  display: flex;
+  align-items: center;
+  padding: 10px 4px 10px 4px;
+  border-bottom: 2px solid #eeeeee;
+}
+
+.col {
+  width: 100%;
+  margin-left: 10px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+}
+
+.messageTime {
+  color: #7c7c7c;
+  font-size: 14px;
+  font-weight: 100;
+}
+
+.userName {
+  color: #363434;
+}
+
+
+.messages {
+  border-radius: 50%;
+  max-height: 50px;
+  max-width: 50px;
+  background-size: cover;
+  background-position: center;
+  color: #181616;
+
+}
+
+.message {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  color: #7c7c7c;
+
+
+}

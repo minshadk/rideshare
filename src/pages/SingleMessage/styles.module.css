@@ -1,0 +1,159 @@
+.headerWrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 4px 10px 4px;
+    border-bottom: 1px solid #E5E5E0;
+    margin-bottom: 25px;
+}
+
+.col {
+    width: 100%;
+    margin-left: 10px;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+}
+
+.messageTime {
+    color: #7c7c7c;
+    font-size: 14px;
+    font-weight: 100;
+}
+
+.userName {
+    font-family: "Uchen", serif;
+}
+
+.avatar {
+    border-radius: 50%;
+    max-height: 48px;
+    max-width: 48px;
+    background-size: cover;
+    background-position: center;
+}
+
+.mutedText {
+    color: "#606060";
+    font-size: 16px;
+
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 5px;
+}
+
+.headerText {
+    color: "#141E0D";
+    font-size: 18px;
+    font-weight: bold;
+}
+
+
+.backIcon {
+    height: 14px;
+    width: 14px
+}
+
+.marginRight {
+    margin-right: 15px;
+}
+
+.editIcon {
+    height: 16px;
+    width: 16px
+}
+
+.dotsIcon {
+    height: 24px;
+    width: 24px
+}
+
+.messageInputContainer {
+    position: fixed;
+    bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    width: 340px;
+    /* height: 42px; */
+    padding: 55px;
+    border-radius: 8px;
+    background: #fff;
+    padding: 15px;
+
+    margin-top: calc(5vh + 16px);
+
+}
+
+.dFlex {
+    display: flex;
+    align-items: center;
+}
+
+.chatsContainer {
+    padding-bottom: 40px;
+    max-height: 400px; 
+    overflow-y: auto;
+}
+
+.messageInput {
+
+    width: 100%;
+    border: none;
+}
+
+
+
+.tooltipWrapper {
+    display: inline-block;
+    position: relative;
+}
+
+.tooltipTip {
+    position: absolute;
+    display: flex;
+    justify-content: space-between;
+    width: 124px;
+    height: 44px;
+    border-radius: 100px;
+    left: 86%;
+    transform: translateX(-50%);
+    padding: 10px;
+    background: #008000;
+    font-size: 14px;
+    font-family: sans-serif;
+    line-height: 1;
+    z-index: 100;
+    white-space: nowrap;
+
+
+}
+
+.tooltipTip::before {
+    content: " ";
+    left: 50%;
+    border: solid transparent;
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-width: var(--tooltip-arrow-size);
+    margin-left: calc(var(--tooltip-arrow-size) * -1);
+}
+
+.tooltipTip.top {
+    top: calc(30px * -1);
+
+}
+
+.tooltipTip.top::before {
+    top: 100%;
+    border-top-color: #008000;
+}
