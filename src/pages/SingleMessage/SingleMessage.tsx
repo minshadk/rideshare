@@ -16,7 +16,9 @@ import dots from "../../assets/dots-vertical.png";
 import edit from "../../assets/edit.png";
 
 const SingleMessage = () => {
-  const [formattedMessages, setFormattedMessages] = useState([]);
+  // const [formattedMessages, setFormattedMessages] = useState([]);
+  const [formattedMessages, setFormattedMessages] = useState<any[]>([]);
+
   const [page, setPage] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [reachedEnd, setReachedEnd] = useState(false);
@@ -27,10 +29,15 @@ const SingleMessage = () => {
 
   const containerRef = useRef(null);
 
-  const handleMessage = (event) => {
-    setMessage(event.target.value);
+  // const handleMessage = (event) => {
+  //   setMessage(event.target.value);
+  // };
+  // const handleMessage = (event: ChangeEvent<HTMLInputElement>) => {
+  //   setMessage(event.target.value);
+  // };
 
-    console.log("value is:", event.target.value);
+  const handleMessage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setMessage(event.target.value);
   };
 
   const handleSendMessage = () => {
@@ -44,6 +51,18 @@ const SingleMessage = () => {
     const seconds = String(date.getSeconds()).padStart(2, "0");
 
     const time = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+
+    // formattedMessages.push({
+    //   message: message,
+    //   sender: { self: true },
+    //   time: time,
+    // });
+
+    const formattedMessages: {
+      message: string;
+      sender: { self: boolean };
+      time: string;
+    }[] = [];
 
     formattedMessages.push({
       message: message,
@@ -63,10 +82,16 @@ const SingleMessage = () => {
 
     window.addEventListener("scroll", handleScroll);
 
-    const scrollToBottom = () => {
-      const container = containerRef.current;
-      container.scrollTop = container.scrollHeight;
-    };
+    // const scrollToBottom = () => {
+    //   const container = containerRef.current;
+    //   container.scrollTop = container.scrollHeight;
+    // };
+    // const scrollToBottom = () => {
+    //   const container = containerRef.current;
+    //   if (container) {
+    //     container.scrollTop = container.scrollHeight;
+    //   }
+    // };
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
@@ -74,6 +99,25 @@ const SingleMessage = () => {
 
     scrollToBottom();
   }, []);
+
+  // const handleScroll = () => {
+  //   const scrollTop =
+  //     document.documentElement.scrollTop || document.body.scrollTop;
+  //   const scrollHeight =
+  //     document.documentElement.scrollHeight || document.body.scrollHeight;
+  //   const clientHeight = document.documentElement.clientHeight;
+
+  //   if (
+  //     scrollTop + clientHeight >= scrollHeight - 100 &&
+  //     !isLoading &&
+  //     !reachedEnd
+  //   ) {
+  //     fetchMessages();
+  //     console.log("fetched");
+  //     console.log(formattedMessages.length);
+  //     console.log(formattedMessages);
+  //   }
+  // };
 
   const handleScroll = () => {
     const scrollTop =
@@ -83,6 +127,7 @@ const SingleMessage = () => {
     const clientHeight = document.documentElement.clientHeight;
 
     if (
+      containerRef.current &&
       scrollTop + clientHeight >= scrollHeight - 100 &&
       !isLoading &&
       !reachedEnd
@@ -125,7 +170,7 @@ const SingleMessage = () => {
         <div className={styles.header}>
           <div className={styles.header}>
             <Link to="/">
-            <img src={back} className={styles.marginRight} />
+              <img src={back} className={styles.marginRight} />
             </Link>
             <h1>Trip 1 </h1>
           </div>
@@ -146,7 +191,7 @@ const SingleMessage = () => {
           <img src={dots} className={styles.dotsIcon} />
         </div>
         {/* Existing code */}
-        <div className="chatsContainer">
+        <div className="chatsContainer" ref={containerRef}>
           {formattedMessages &&
             formattedMessages.map((message) => (
               <Chat
