@@ -97,7 +97,6 @@ const SingleMessage = () => {
       window.removeEventListener("scroll", handleScroll);
     };
 
-    scrollToBottom();
   }, []);
 
   // const handleScroll = () => {
