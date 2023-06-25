@@ -1,13 +1,18 @@
 .chatContainer {
     display: flex;
-    justify-content: left;
-    /* justify-content: flex-end; */
+    flex-direction: row;
     margin-bottom: 25px;
     max-width: 319px;
 }
 
 .alignLeft {
+    display: flex;
     justify-content: flex-end;
+}
+
+.alignRight {
+    display: flex;
+    justify-content: flex-start;
 }
 
 .badge {
@@ -30,18 +35,16 @@
     color: #606060;
     font-size: 14px;
     padding: 9px;
-    width: 287px;
-    border-radius: 0 5px 5px 5px;
+    width: 271px;
+    border-radius: 0 12px 12px 12px;
     box-shadow: 0 -6px 0 #fff, 0 1px 6px rgba(0, 0, 0, .35)
 }
 
 .messageContainerSelf {
-    background: #1C63D5;
     color: #fff;
     font-size: 14px;
     padding: 9px;
-    width: 287px;
-    border-radius: 5px 0px 5px 5px;
-    justify-content: flex-end;
-
+    width: 271px;
+    border-radius: 12px 12px 0px 12px;
+    background: #1C63D5;
 }

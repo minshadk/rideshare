@@ -16,125 +16,62 @@ import dots from "../../assets/dots-vertical.png";
 import edit from "../../assets/edit.png";
 
 const SingleMessage = () => {
-  // const [formattedMessages, setFormattedMessages] = useState([]);
   const [formattedMessages, setFormattedMessages] = useState<any[]>([]);
-
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [reachedEnd, setReachedEnd] = useState(false);
-
   const [showTooltip, setShowTooltip] = useState(false);
-
   const [message, setMessage] = useState("");
 
-  const containerRef = useRef(null);
-
-  // const handleMessage = (event) => {
-  //   setMessage(event.target.value);
-  // };
-  // const handleMessage = (event: ChangeEvent<HTMLInputElement>) => {
-  //   setMessage(event.target.value);
-  // };
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   const handleMessage = (event: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(event.target.value);
   };
 
   const handleSendMessage = () => {
-    const date = new Date();
+    if (message != "") {
+      const date = new Date();
 
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    const hours = String(date.getHours()).padStart(2, "0");
-    const minutes = String(date.getMinutes()).padStart(2, "0");
-    const seconds = String(date.getSeconds()).padStart(2, "0");
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      const hours = String(date.getHours()).padStart(2, "0");
+      const minutes = String(date.getMinutes()).padStart(2, "0");
+      const seconds = String(date.getSeconds()).padStart(2, "0");
 
-    const time = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+      const time = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 
-    // formattedMessages.push({
-    //   message: message,
-    //   sender: { self: true },
-    //   time: time,
-    // });
+      const formattedMessages: {
+        message: string;
+        sender: { self: boolean };
+        time: string;
+      }[] = [];
 
-    const formattedMessages: {
-      message: string;
-      sender: { self: boolean };
-      time: string;
-    }[] = [];
+      formattedMessages.push({
+        message: message,
+        sender: { self: true },
+        time: time,
+      });
 
-    formattedMessages.push({
-      message: message,
-      sender: { self: true },
-      time: time,
-    });
+      setFormattedMessages(formattedMessages);
 
-    setMessage("");
+      setMessage("");
+    }
   };
 
   const handleClick = () => {
     setShowTooltip(!showTooltip);
   };
 
-  useEffect(() => {
-    fetchMessages();
-
-    window.addEventListener("scroll", handleScroll);
-
-    // const scrollToBottom = () => {
-    //   const container = containerRef.current;
-    //   container.scrollTop = container.scrollHeight;
-    // };
-    // const scrollToBottom = () => {
-    //   const container = containerRef.current;
-    //   if (container) {
-    //     container.scrollTop = container.scrollHeight;
-    //   }
-    // };
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-
-  }, []);
-
-  // const handleScroll = () => {
-  //   const scrollTop =
-  //     document.documentElement.scrollTop || document.body.scrollTop;
-  //   const scrollHeight =
-  //     document.documentElement.scrollHeight || document.body.scrollHeight;
-  //   const clientHeight = document.documentElement.clientHeight;
-
-  //   if (
-  //     scrollTop + clientHeight >= scrollHeight - 100 &&
-  //     !isLoading &&
-  //     !reachedEnd
-  //   ) {
-  //     fetchMessages();
-  //     console.log("fetched");
-  //     console.log(formattedMessages.length);
-  //     console.log(formattedMessages);
-  //   }
-  // };
-
   const handleScroll = () => {
-    const scrollTop =
-      document.documentElement.scrollTop || document.body.scrollTop;
-    const scrollHeight =
-      document.documentElement.scrollHeight || document.body.scrollHeight;
-    const clientHeight = document.documentElement.clientHeight;
-
     if (
       containerRef.current &&
-      scrollTop + clientHeight >= scrollHeight - 100 &&
+      containerRef.current.scrollTop === 0 &&
       !isLoading &&
       !reachedEnd
     ) {
       fetchMessages();
-      console.log("fetched");
-      console.log(formattedMessages.length);
-      console.log(formattedMessages);
     }
   };
 
@@ -151,9 +88,7 @@ const SingleMessage = () => {
       if (chats.length === 0) {
         setReachedEnd(true);
       } else {
-        setFormattedMessages((prevMessages) => [...prevMessages, ...chats]);
-        console.log(formattedMessages);
-
+        setFormattedMessages((prevMessages) => [...chats, ...prevMessages]);
         setPage((prevPage) => prevPage + 1);
       }
     } catch (error) {
@@ -163,36 +98,57 @@ const SingleMessage = () => {
     }
   };
 
+  useEffect(() => {
+    fetchMessages();
+
+    if (containerRef.current) {
+      containerRef.current.addEventListener("scroll", handleScroll);
+    }
+
+    return () => {
+      if (containerRef.current) {
+        containerRef.current.removeEventListener("scroll", handleScroll);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (containerRef.current) {
+      containerRef.current.scrollTop = containerRef.current.scrollHeight;
+    }
+  }, [formattedMessages]);
+
   return (
     <section className={layout.page}>
       <div className={layout.container}>
-        <div className={styles.header}>
+        <div className={styles.headerContainer}>
           <div className={styles.header}>
-            <Link to="/">
-              <img src={back} className={styles.marginRight} />
-            </Link>
-            <h1>Trip 1 </h1>
+            <img src={back} className={styles.marginRight} />
+            <h1 className={styles.headerText}>Trip 1</h1>
           </div>
-          <img src={edit} className={styles.editIcon} />
+          <img src={edit} className={styles.editIcon} alt="Edit" />
         </div>
         <div className={styles.headerWrapper}>
           <div className={`${styles.dFlex} `}>
             <img
               className={`${styles.avatar} ${styles.marginRight}`}
               src={groupImage}
+              alt="Group"
             />
             <div>
               <span className={styles.mutedText}>From</span>
-              <span className={styles.headerText}> IGI Airport, T3</span>
-              <div className={styles.messageTime}>To Sector 28</div>
+              <span className={styles.headerSubHeading}> IGI Airport, T3</span>
+              <div>
+                <span className={styles.mutedText}>To </span>
+                <span className={styles.headerSubHeading}> Sector 28</span>
+              </div>
             </div>
           </div>
-          <img src={dots} className={styles.dotsIcon} />
+          <img src={dots} className={styles.dotsIcon} alt="Dots" />
         </div>
-        {/* Existing code */}
-        <div className="chatsContainer" ref={containerRef}>
-          {formattedMessages &&
-            formattedMessages.map((message) => (
+        <div>
+          <div className={styles.chatsContainer} ref={containerRef}>
+            {formattedMessages.map((message) => (
               <Chat
                 key={message.id}
                 message={message.message}
@@ -201,33 +157,34 @@ const SingleMessage = () => {
                 imageUrl={message.sender.image}
               />
             ))}
-          {isLoading && <p>Loading...</p>}
-          {reachedEnd && <p>No more messages.</p>}
-        </div>
-
-        <div className={styles.messageInputContainer}>
-          <input
-            className={styles.messageInput}
-            type="text"
-            id="message"
-            name="message"
-            onChange={handleMessage}
-            value={message}
-          />
-          <div className={styles.dFlex}>
-            {showTooltip && (
-              <div className={`${styles.tooltipTip}  ${styles.top}`}>
-                <img src={photoImage} />
-                <img src={videoImage} />
-                <img src={documentImage} />
-              </div>
-            )}
-            <img
-              src={paperClipImage}
-              className={styles.tooltipWrapper}
-              onClick={handleClick}
+            {isLoading && <p>Loading...</p>}
+            {reachedEnd && <p>No more messages.</p>}
+          </div>
+          <div className={styles.messageInputContainer}>
+            <input
+              className={styles.messageInput}
+              type="text"
+              id="message"
+              name="message"
+              onChange={handleMessage}
+              value={message}
             />
-            <img src={sendImage} onClick={handleSendMessage} />
+            <div className={styles.dFlex}>
+              {showTooltip && (
+                <div className={`${styles.tooltipTip}  ${styles.top}`}>
+                  <img src={photoImage} alt="Photo" />
+                  <img src={videoImage} alt="Video" />
+                  <img src={documentImage} alt="Document" />
+                </div>
+              )}
+              <img
+                src={paperClipImage}
+                className={styles.tooltipWrapper}
+                onClick={handleClick}
+                alt="Attach"
+              />
+              <img src={sendImage} onClick={handleSendMessage} />
+            </div>
           </div>
         </div>
       </div>
